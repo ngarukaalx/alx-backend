@@ -10,6 +10,7 @@ class LRUCache(BaseCaching):
         """class constructor"""
         self.timestamp = {}
         super().__init__()
+
     def put(self, key, item):
         """implements LRU alogarithm"""
         if key is None or item is None:
