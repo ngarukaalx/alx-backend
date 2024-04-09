@@ -10,13 +10,17 @@ app = Flask(__name__)
 class Config:
     """list of available languages"""
     LANGUAGES = ['en', 'fr']
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
+
 
 # use Config to set Babel's default locale "en"
 # and timezones ("UTC")
-app.config['BABEL_DEFAULT_LOCALE'] = 'en'
-app.config['BABEL_DEFAULT_TIMEZONE'] = 'UTC'
+app.config.from_object(Config)
+
 
 babel = Babel(app)
+
 
 @app.route('/', strict_slashes=False)
 def hello_ba() -> Any:
