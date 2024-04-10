@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<HTML lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+	<h1>{{ gettext("Hello world!") }}</h1>
+        {% if user %}
+        <p>{{ gettext("You are logged in as") }} {{ user }}.</p>
+        {% else %}
+        <p>{{ gettext("You are not logged in") }}.</p>
+        {% endif %}
+    </body>
+</HTML>
