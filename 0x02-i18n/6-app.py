@@ -43,16 +43,17 @@ def before_request() -> None:
 
 
 @babel.localeselector
-def get_locale() -> Union[str, None]:
+def get_locale() -> str:
     """determine the best match of lang"""
     if 'locale' in request.args:
         user_locale = request.args.get('locale')
         if user_locale in Config.LANGUAGES:
             return user_locale
     # locale from user settings
-    if g.user and g.user.get('locale') \
-            and g.user.get('locale') in Config.LANGUAGES:
-        return g.user.get('locale')
+    if 'user' in g:
+        if g.user and g.user.get('locale') \
+                and g.user.get('locale') in Config.LANGUAGES:
+            return g.user.get('locale')
     # default
     return request.accept_languages.best_match(Config.LANGUAGES)
 

@@ -43,7 +43,7 @@ def before_request() -> None:
 
 
 @babel.localeselector
-def get_locale() -> Union[str, None]:
+def get_locale() -> str:
     """determine the best match of lang"""
     if 'locale' in request.args:
         user_locale = request.args.get('locale')
