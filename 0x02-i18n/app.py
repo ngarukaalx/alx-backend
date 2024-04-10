@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""Basic flask app"""
+from flask import Flask, render_template, request, g
+from typing import Any, Union, Dict
+from flask_babel import Babel, format_datetime, _
+from config import Config
+from datetime import datetime
+import pytz
+
+app = Flask(__name__)
+
+
+# use Config to set Babel's default locale "en"
+# and timezones ("UTC")
+# app.config.from_object(Config)
+
+
+babel = Babel(app)
+
+# user table
+users = {
+    1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
+    2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
+    3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
+    4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
+}
+
+
+def get_user() -> Union[Dict, None]:
+    """returns a user dictionary or none"""
+    user_id = request.args.get('login_as')
+    print("hii: {}".format(user_id))
+    if user_id:
+        current_user = users.get(int(user_id))
+        return current_user
+    return None
+
+
+@app.before_request
+def before_request() -> None:
+    """use get_user to find a user if any and set it as flask.g.user"""
+    user_dict = get_user()
+    if user_dict:
+        g.user = user_dict
+
+
+@babel.localeselector
+def get_locale() -> str:
+    """determine the best match of lang"""
+    if 'locale' in request.args:
+        user_locale = request.args.get('locale')
+        if user_locale in Config.LANGUAGES:
+            return user_locale
+    # locale from user settings
+    if 'user' in g:
+        if g.user and g.user.get('locale') \
+                and g.user.get('locale') in Config.LANGUAGES:
+            return g.user.get('locale')
+    # default
+    return request.accept_languages.best_match(Config.LANGUAGES)
+
+
+@babel.timezoneselector
+def get_timezone() -> str:
+    """infer appropriate time zone"""
+    time_zone = 'UTC'
+    if 'timezone' in request.args:
+        time_zone = request.args.get('timezone')
+    if 'user' in g:
+        if g.user.get('timezone'):
+            time_zone = g.user.get('timezone')
+    try:
+        pytz.timezone(time_zone)
+        return time_zone
+    except UnknownTimeZoneError:
+        return None
+
+@app.route('/', strict_slashes=False)
+def hello_ba() -> Any:
+    """Display an html page"""
+    if 'user' in g:
+        user = g.user['name']
+    else:
+        user = None
+    now = datetime.today()
+    format_time = format_datetime(now)
+
+    return render_template('index.html', user=user, time=format_time)
+
+
+if __name__ == "__main__":
+    """Main func"""
+    app.run(host='0.0.0.0', port=5000, debug=True)

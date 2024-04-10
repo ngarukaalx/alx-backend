@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-04-10 17:11+0000\n"
+"POT-Creation-Date: 2024-04-10 20:07+0000\n"
 "PO-Revision-Date: 2024-04-10 07:51+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -23,18 +23,24 @@ msgid "Welcome to Holberton"
 msgstr "Bienvenue chez Holberton"
 
 #: templates/3-index.html:9 templates/4-index.html:9 templates/5-index.html:8
-#: templates/6-index.html:8
+#: templates/6-index.html:8 templates/7-index.html:8 templates/index.html:8
 msgid "Hello world!"
 msgstr "Bonjour monde!"
 
 #: templates/5-index.html:10 templates/6-index.html:10
+#: templates/7-index.html:10 templates/index.html:10
 msgid "You are logged in as"
 msgstr "Vous êtes connecté en tant que"
 
 #: templates/5-index.html:12 templates/6-index.html:12
+#: templates/7-index.html:12 templates/index.html:12
 #, fuzzy
 msgid "You are not logged in"
 msgstr "Vous n'êtes pas connecté."
+
+#: templates/index.html:14
+msgid "The current time is"
+msgstr "Nous sommes le"
 
 #~ msgid "home_title"
 #~ msgstr "Bienvenue chez Holberton"
