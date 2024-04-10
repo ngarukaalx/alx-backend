@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Basic flask app"""
 from flask import Flask, render_template, request
-from typing import Any, Optional
+from typing import Any, Union
 from flask_babel import Babel
 
 app = Flask(__name__)
@@ -16,14 +16,14 @@ class Config:
 
 # use Config to set Babel's default locale "en"
 # and timezones ("UTC")
-app.config.from_object(Config)
+# app.config.from_object(Config)
 
 
 babel = Babel(app)
 
 
 @babel.localeselector
-def get_locale() -> Optional[str]:
+def get_locale() -> Union[str, None]:
     """determine the best match of lang"""
     if 'locale' in request.args:
         user_locale = request.args.get('locale')
