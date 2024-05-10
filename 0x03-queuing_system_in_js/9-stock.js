@@ -6,7 +6,8 @@ const client = redis.createClient();
 
 // In stock in Redis
 function reserveStockById(itemId, stock) {
-	client.set(itemId, stock, (err, reply) => {
+	const value = JSON.stringify(stock);
+	client.set(itemId, value, (err, reply) => {
 		if (err) {
 			console.log('Error setting', err);
 		} else {
@@ -17,22 +18,16 @@ function reserveStockById(itemId, stock) {
 
 // It will return the reserved stock for a specific item
 async function getCurrentReservedStockById(ItemId) {
-	return new Promise((resolve, reject) => {
-		let item = null;
-		for (let i = 0; i < listProducts.length; i++) {
-			const obj = listProducts[i];
-			if (obj.Id == ItemId) {
-				item = obj
-				break;
-			}
-		}
-		if (item !== null) {
-			resolve(item);
-		} else {
-			reject('Item not found.');
-		}
+	const { promisify } = require('util');
+	const getAsync = promisify(client.get).bind(client);
 
-	});
+	try {
+		const  value = await getAsync(ItemId);
+		const parsedValue = JSON.parse(value);
+		return parsedValue;
+	} catch (err) {
+		throw new Error('Not found');
+	}
 };
 
 let listProducts = [
@@ -74,7 +69,12 @@ app.get('/list_products/:itemId', (req, res) => {
 	const itemId = req.params.itemId;
 	getCurrentReservedStockById(itemId)
 		.then(result => {
-			res.json(result);
+			if (result !== null) {
+				res.json(result);
+			} else {
+				const msg = { status: 'Product not found'};
+				res.json(msg);
+			}
 		})
 		.catch((error) => {
 			const msg = { status: 'Product not found'};
