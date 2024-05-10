@@ -27,7 +27,7 @@ function setNewSchool(schoolName, value) {
 	});
 };
 
-function displaySchoolValue(schoolName) {
+async function displaySchoolValue(schoolName) {
 	// display value async
 	const { promisify } = require('util');
 	const getAsync = promisify(client.get).bind(client);
@@ -37,7 +37,7 @@ function displaySchoolValue(schoolName) {
 		const  value = await getAsync(schoolName);
 		console.log(value);
 	} catch (err) {
-		console.error('Error getting value: ', err);
+		console.error('Error getting value: ', err.message);
 	}
 };
 
