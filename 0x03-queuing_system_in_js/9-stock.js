@@ -1,5 +1,6 @@
-const express = require('express');
-const redis = require('redis');
+import redis from 'redis';
+import util from 'util';
+import express from 'express';
 
 // create a client
 const client = redis.createClient();
@@ -18,7 +19,7 @@ function reserveStockById(itemId, stock) {
 
 // It will return the reserved stock for a specific item
 async function getCurrentReservedStockById(ItemId) {
-	const { promisify } = require('util');
+	const promisify = util.promisify;
 	const getAsync = promisify(client.get).bind(client);
 
 	try {

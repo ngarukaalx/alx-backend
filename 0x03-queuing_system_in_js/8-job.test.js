@@ -1,8 +1,8 @@
 import kue from 'kue';
-const chai = require('chai');
+import chai from 'chai';
 
 // import function to test
-let createPushNotificationsJobs = require('./8-job.js');
+import createPushNotificationsJobs from './8-job.js';
 
 let  queue = kue.createQueue();
 

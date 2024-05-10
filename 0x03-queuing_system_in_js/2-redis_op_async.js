@@ -2,6 +2,7 @@
 // to the Redis server running on my machine:
 
 import redis from 'redis';
+import util from 'util';
 
 // create a Redis client
 const client = redis.createClient();
@@ -29,7 +30,7 @@ function setNewSchool(schoolName, value) {
 
 async function displaySchoolValue(schoolName) {
 	// display value async
-	const { promisify } = require('util');
+	const promisify = util.promisify;
 	const getAsync = promisify(client.get).bind(client);
 
 	// use async/wait with promisified methods
